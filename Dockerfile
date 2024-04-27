@@ -1,4 +1,11 @@
-FROM ubuntu:latest
-LABEL authors="murta"
+FROM python:3.10-alpine
 
-ENTRYPOINT ["top", "-b"]
+RUN pip install --upgrade pip
+
+WORKDIR /app
+
+ADD . /app
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD [ "uvicorn", "main:app", "--port=8080", "--reload" ]
