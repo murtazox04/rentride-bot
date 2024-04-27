@@ -1,15 +1,7 @@
 from fastapi import FastAPI
-
 from decouple import config
 
-from aiogram import Dispatcher, Bot
-from aiogram.fsm.storage.memory import MemoryStorage
-
-TOKEN = config("BOT_TOKEN")
-WEBHOOK_PATH = f"/{TOKEN}/"
+WEBHOOK_PATH = config('WEBHOOK_PATH')
 WEBHOOK_URL = config("WEBHOOK_URL") + WEBHOOK_PATH
 
 app = FastAPI(title="RentRide Client Bot")
-bot = Bot(TOKEN)
-storage = MemoryStorage()
-dp = Dispatcher(storage=storage)

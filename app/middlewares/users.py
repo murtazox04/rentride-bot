@@ -4,7 +4,7 @@ from aiogram import BaseMiddleware
 from decouple import config
 from typing import Callable, Dict, Any, Awaitable
 
-AUTH_URL = config('AUTH_URL')
+BASE_URL = config('BASE_URL')
 
 
 class UserMiddleware(BaseMiddleware):
@@ -27,9 +27,9 @@ class UserMiddleware(BaseMiddleware):
 
     async def login(self, user_id: int) -> bool:
         async with aiohttp.ClientSession() as session:
-            response = await session.post(AUTH_URL, json={"user_id": user_id})
+            response = await session.post(BASE_URL + "/login", json={"user_id": user_id})
             return response.status == 200
 
     async def register_user(self, user_id: int, data: Dict) -> None:
         async with aiohttp.ClientSession() as session:
-            await session.post(AUTH_URL, json={"user_id": user_id, **data})
+            await session.post(BASE_URL + "/register", json={"user_id": user_id, **data})

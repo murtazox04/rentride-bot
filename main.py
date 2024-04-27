@@ -1,11 +1,14 @@
 from aiogram import Dispatcher, types
 
-from middlewares import UserMiddleware
-from loader import app, dp, bot, WEBHOOK_PATH, WEBHOOK_URL
+from app.config import dp, bot
+from app.middlewares import UserMiddleware
+from loader import app, WEBHOOK_URL, WEBHOOK_PATH
+from db.config import connect_to_mongo, close_mongo_connection
 
 
 @app.on_event("startup")
 async def on_startup() -> None:
+    await connect_to_mongo()
     dp.message.middleware(UserMiddleware())
     # dp.include_router(callback_query_router)
     # dp.include_router(command_router)
@@ -29,4 +32,5 @@ async def bot_webhook(update: dict) -> None:
 
 @app.on_event("shutdown")
 async def on_shutdown() -> None:
+    await close_mongo_connection()
     await dp.storage.close()
